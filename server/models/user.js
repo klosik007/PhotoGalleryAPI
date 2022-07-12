@@ -16,8 +16,19 @@ class User {
         )
         `
 
-        return this.dao.run(sql)
+        return this.dao.run(query)
     }
+
+    addUser(name) {
+        const query = 
+        `
+        INSERT INTO user (name) VALUES (?)
+        `
+
+        return this.dao.run(query, [name])
+    }
+
+    
 }
 
 export default User
