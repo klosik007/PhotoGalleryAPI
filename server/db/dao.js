@@ -1,5 +1,6 @@
 import sqlite3 from 'sqlite3'
 import Promise from 'bluebird'
+import { result } from 'lodash'
 
 class AppDAO {
     constructor(dbPath) {
@@ -17,8 +18,22 @@ class AppDAO {
             this.db.run(sql, params, (err) => {
                 if (err) {
                     console.log('Could not run sql ${sql}\nError: ${err}')
+                    reject(err)
                 } else {
-                    //resolve({})
+                    resolve({}) // TODO: what object should be here?
+                }
+            })
+        })
+    }
+
+    get(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, params, (err, result) => {
+                if (err) {
+                    console.log('Could not run sql ${sql}\nError: ${err}')
+                    reject(err)
+                } else {
+                    resolve(result)
                 }
             })
         })
