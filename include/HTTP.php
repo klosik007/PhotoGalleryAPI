@@ -11,7 +11,7 @@ abstract class HTTP {
         }
     }
 
-    public static function path(int $index = -1) {
+    public static function path(int $index = -1): string {
         if ($index < 0)
             return $_GET['path'];
         elseif ($index < self::pathLength())
@@ -20,7 +20,41 @@ abstract class HTTP {
             return '';
     }
 
-    private static function request(string $name = '', $default = NULL) {
+    public static function requestString(string $name, ?string $default) {
+        $val = self::request($name, $default);
+        return (is_string($val)) ? $val : $default;
+    }
+
+    public static function requestInt(string $name, ?int $default) {
+        $val = self::request($name, $default);
+        return (is_numeric($val)) ? intval($val) : $default;
+    }
+
+    public static function requestBool(string $name, ?bool $default) {
+        $val = self::request($name, $default);
+        $boolVal = filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        return ($boolVal !== null) ? $boolVal : $default;
+    }
+
+    public static function returnsApplicationJSON() {
+        header('Content-type: application/json; charset=utf-8');
+    }
+
+    public static function wantsPost() {
+        if (!self::isPost()) {
+            self::return405();
+            die();
+        }
+    }
+
+    public static function wantsGet() {
+        if (!self::isGet()) {
+            self::return405();
+            die();
+        }
+    }
+
+    private static function request(string $name = '', $default = null) {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET': {
                 $data = $_GET;
@@ -31,18 +65,49 @@ abstract class HTTP {
                 }
             }
             case 'POST': {
-
+                if (self::isJSON()) {
+                    $data = json_decode(file_get_contents("php://input"), true);
+                    if ($name == '')
+                        return $data;
+                    else {
+                        return $data[$name] ?? $default;
+                    }
+                } elseif (isset($_POST[$name]))
+                    return $_POST[$name];
+                else
+                    return $default;
             }
-            case 'PUT': {
-
-            }
+            default:
+                return null;
         }
     }
 
-    private static function pathLength() {
+    private static function pathLength(): int {
         return count(self::$path);
     }
 
-    private static $path = array();
+    private static function isJSON(): bool {
+        $contentType = "application/json";
+        return strcasecmp(substr(self::contentType(), 0, strlen($contentType)), $contentType) == 0;
+    }
+
+    private static function isGet() {
+        return $_SERVER['REQUEST_METHOD'] === 'GET';
+    }
+
+    private static function isPost() {
+        return $_SERVER['REQUEST_METHOD'] === 'POST';
+    }
+
+    private static function contentType(): string {
+        return $_SERVER['CONTENT_TYPE'] ?? '';
+    }
+
+    private static function return405($response = Result::http405) {
+        http_response_code(405);
+        echo json_encode($response);
+    }
+
+    private static array $path = array();
 }
 
