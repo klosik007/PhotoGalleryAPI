@@ -54,6 +54,21 @@ abstract class HTTP {
         }
     }
 
+    public static function return405($response = Result::http405) {
+        http_response_code(405);
+        echo json_encode($response);
+    }
+
+    public static function return404($response = Result::http404) {
+        http_response_code(404);
+        echo json_encode($response);
+    }
+
+    public static function return501($response = Result::http501) {
+        http_response_code(501);
+        echo json_encode($response);
+    }
+
     private static function request(string $name = '', $default = null) {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET': {
@@ -101,11 +116,6 @@ abstract class HTTP {
 
     private static function contentType(): string {
         return $_SERVER['CONTENT_TYPE'] ?? '';
-    }
-
-    private static function return405($response = Result::http405) {
-        http_response_code(405);
-        echo json_encode($response);
     }
 
     private static array $path = array();
