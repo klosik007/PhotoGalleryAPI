@@ -16,4 +16,17 @@ abstract class DB {
 
         return $db;
     }
+
+    public static function runRollback(\MySQLi $db, string $message = '') {
+        $db->rollback();
+        $db->autocommit(true);
+
+        return $message;
+    }
+
+    public static function beginTransaction(\MySQLi $db) {
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $db->autocommit(false);
+        $db->begin_transaction();
+    }
 }
