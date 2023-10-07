@@ -54,8 +54,13 @@ abstract class HTTP {
         }
     }
 
-    public static function return405($response = Result::http405) {
-        http_response_code(405);
+    public static function return400($response = Result::http400) {
+        http_response_code(400);
+        echo json_encode($response);
+    }
+
+    public static function return403($response = Result::http403) {
+        http_response_code(403);
         echo json_encode($response);
     }
 
@@ -63,6 +68,22 @@ abstract class HTTP {
         http_response_code(404);
         echo json_encode($response);
     }
+
+    public static function return405($response = Result::http405) {
+        http_response_code(405);
+        echo json_encode($response);
+    }
+
+    public static function return406($response = Result::http406) {
+        http_response_code(406);
+        echo json_encode($response);
+    }
+
+    public static function return415($response = Result::http415) {
+        http_response_code(415);
+        echo json_encode($response);
+    }
+
 
     public static function return501($response = Result::http501) {
         http_response_code(501);
