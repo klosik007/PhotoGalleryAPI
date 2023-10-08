@@ -3,18 +3,18 @@
 namespace PHOTOGALLERY;
 
 abstract class DB {
-    public static function open() {
-        $db = new \MySQLi(
-            Settings::$db['host'],
-            Settings::$db['username'],
-            Settings::$db['password'],
-            Settings::$db['database'],
-            Settings::$db['port']
-        );
+    public static function open(): \mysqli {
+        if (!isset(self::$db)) {
+            self::$db = new \mysqli(
+                Settings::$db['host'],
+                Settings::$db['username'],
+                Settings::$db['password'],
+                Settings::$db['database'],
+                Settings::$db['port']
+            );
+        }
 
-        $db->query("set names utf8mb4");
-
-        return $db;
+        return self::$db;
     }
 
     public static function runRollback(\MySQLi $db, string $message = '') {
@@ -29,4 +29,6 @@ abstract class DB {
         $db->autocommit(false);
         $db->begin_transaction();
     }
+
+    private static $db;
 }

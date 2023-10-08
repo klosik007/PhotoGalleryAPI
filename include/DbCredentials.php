@@ -7,5 +7,5 @@ class DbCredentials {
     const PORT = 33070;
     const DATABASE = "xbit";
     const USERNAME = "pklos";
-    const PASSWORD = "wtf007klos";
+    const PASSWORD = "xyz";
 }
