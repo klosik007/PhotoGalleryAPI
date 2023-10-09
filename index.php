@@ -8,20 +8,18 @@ require_once 'include/DbCredentials.php';
 require_once 'include/Settings.php';
 require_once 'include/Result.php';
 
-function activateApiAndDie(): void {
-    if (file_exists('api.php')) {
-        include 'api.php';
-        die();
+HTTP::init();
+echo HTTP::path(0);
+if (HTTP::path(0) != '') {
+    $partFile = 'parts/' . HTTP::path(0) . '.php';
+    if (file_exists($partFile)) {
+        include $partFile;
+    }
+    else {
+        HTTP::returnsApplicationJSON();
+        HTTP::return404();
     }
 }
-
-HTTP::init();
-
-$action = HTTP::requestString('action', '');
-if (empty($action) && !empty(HTTP::path(0))) {
-    activateApiAndDie();
-    die();
+else {
+    include 'parts/index.php';
 }
-
-activateApiAndDie();
-HTTP::return404();
