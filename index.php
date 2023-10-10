@@ -9,17 +9,22 @@ require_once 'include/Settings.php';
 require_once 'include/Result.php';
 
 HTTP::init();
-echo HTTP::path(0);
-if (HTTP::path(0) != '') {
-    $partFile = 'parts/' . HTTP::path(0) . '.php';
-    if (file_exists($partFile)) {
-        include $partFile;
+
+if (HTTP::authenticateAPI() == Result::OK()) {
+    if (HTTP::path(0) != '') {
+        $partFile = 'parts/' . HTTP::path(0) . '.php';
+        if (file_exists($partFile)) {
+            include $partFile;
+        }
+        else {
+            HTTP::returnsApplicationJSON();
+            HTTP::return404();
+            die();
+        }
     }
     else {
-        HTTP::returnsApplicationJSON();
-        HTTP::return404();
+        include 'parts/index.php';
     }
-}
-else {
-    include 'parts/index.php';
+} else {
+    HTTP::return401();
 }
