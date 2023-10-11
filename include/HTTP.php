@@ -2,8 +2,6 @@
 
 namespace PHOTOGALLERY;
 
-
-
 abstract class HTTP {
     public static function init(): void {
         date_default_timezone_set('UTC');

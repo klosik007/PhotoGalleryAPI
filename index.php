@@ -11,21 +11,22 @@ require_once 'include/SettingsLocal.php';
 
 HTTP::init();
 
-if (HTTP::authenticateAPI() == Result::OK()) {
-    if (HTTP::path(0) != '') {
-        $partFile = 'parts/' . HTTP::path(0) . '.php';
-        if (file_exists($partFile)) {
-            include $partFile;
-        }
-        else {
-            HTTP::returnsApplicationJSON();
-            HTTP::return404();
-            die();
-        }
+if (HTTP::authenticateAPI() == Result::http401) {
+    HTTP::return401();
+    die();
+}
+
+if (HTTP::path(0) != '') {
+    $partFile = 'parts/' . HTTP::path(0) . '.php';
+    if (file_exists($partFile)) {
+        include $partFile;
     }
     else {
-        include 'parts/index.php';
+        HTTP::returnsApplicationJSON();
+        HTTP::return404();
+        die();
     }
-} else {
-    HTTP::return401();
+}
+else {
+    include 'parts/index.php';
 }

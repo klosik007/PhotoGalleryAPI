@@ -18,7 +18,7 @@ services:
       MYSQL_ROOT_PASSWORD: dupa.8
       MYSQL_DATABASE: xbit
       MYSQL_USER: pklos
-      MYSQL_PASSWORD: wtf007klos
+      MYSQL_PASSWORD: pass
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
