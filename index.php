@@ -7,6 +7,7 @@ require_once 'include/HTTP.php';
 require_once 'include/DbCredentials.php';
 require_once 'include/Settings.php';
 require_once 'include/Result.php';
+require_once 'include/SettingsLocal.php';
 
 HTTP::init();
 

@@ -2,6 +2,8 @@
 
 namespace PHOTOGALLERY;
 
+
+
 abstract class HTTP {
     public static function init(): void {
         date_default_timezone_set('UTC');
@@ -112,7 +114,7 @@ abstract class HTTP {
     }
 
     private static function checkAPIKey(string $apiKey): array {
-        if ($apiKey == 'someapikeybutnottrueforgithubrepo')
+        if ($apiKey == SettingsLocal::API_KEY)
             return Result::OK();
         else
             return Result::http401;
