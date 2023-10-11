@@ -1,0 +1,31 @@
+version: '3'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/html
+      - ./xdebug/xdebug.ini:/usr/local/etc/php/xdebug/docker-php-ext-xdebug.ini
+      - ./xdebug/error_reporting.ini:/usr/local/etc/php/xdebug/error_reporting.ini
+    ports:
+      - 8080:80
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: dupa.8
+      MYSQL_DATABASE: xbit
+      MYSQL_USER: pklos
+      MYSQL_PASSWORD: wtf007klos
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - 33070:3306
+volumes:
+  mysql_data:
+
+# docker-compose down
+# docker-compose build
+# docker-compose up -d
