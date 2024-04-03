@@ -40,7 +40,10 @@ services:
             - symfony_app
         env_file:
             - .env.nginx.local
-
+    elasticsearch:
+        image: elasticsearch:8.13.0
+        ports:
+            - "9200:9200"
 volumes:
     symfony_app_var:
     symfony_app_vendor:
